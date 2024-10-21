@@ -22,9 +22,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 //        <editor-fold desc="Variables">
-        int numPM = 4; // Amount Physical Machine - Host | (4-10) (12-50)
-        int numVM = 10; // Amount Virtual Machine - Task
-        int solution = 5; // for Switch condition: 0 -> Nothing; 1 -> ACO; 2 -> PSO; 3 -> SA;
+        int numPM = 120; // Amount Physical Machine - Host | (4-10) (12-50)
+        int numVM = 450; // Amount Virtual Machine - Task
+        int solution = 8; // for Switch condition: 0 -> Nothing; 1 -> ACO; 2 -> PSO; 3 -> SA;
         int aco_numAnts = 100; // ACO - Amount ants generate
         double aco_alpha = 1.0; // ACO - Pheromone importance
         double aco_beta = 2.0; // ACO - Distance priority
@@ -34,7 +34,7 @@ public class Main {
         double pso_defaultW = 0.729844; // PSO Constants
         double pso_defaultC1 = 1.496185; // PSO Constants
         double pso_defaultC2 = 1.496185; // PSO Constants
-        double sa_temp = 100; // SA - Intialize temperature
+        double sa_temp = 1000; // SA - Intialize temperature
         double sa_coolRate = .05; // SA - Cooling Rate
         int gm_k = 3; // Model - Nums resource
         int gm_alpha = 2; // Model - Coefficient
@@ -76,38 +76,44 @@ public class Main {
         ImportFile(mc, "pm.txt", numPM, true);
         ImportFile(mc, "vm.txt", numVM, false);
 
+        long startTime = System.nanoTime();
+        
         switch (solution) {
             case 1 -> {
-//                Ant Colony Optimization Algorithm
+                // Ant Colony Optimization Algorithm
                 ACO aco = new ACO(aco_numAnts, mc, aco_alpha, aco_beta, aco_evRate, gm_k, gm_alpha);
                 aco.solve();
             }
             case 2 -> {
-//                Particle Swarm Optimization Algorithm
+                // Particle Swarm Optimization Algorithm
                 PSO pso = new PSO(mc, pso_numParticles, pso_Iteration, pso_defaultW, pso_defaultC1, pso_defaultC2, gm_k, gm_alpha);
                 pso.solve();
             }
             case 3 -> {
-//                Simulated Annealing Algorithm
+                // Simulated Annealing Algorithm
                 SA sa = new SA(mc, sa_temp, sa_coolRate, gm_k, gm_alpha);
                 sa.solve();
             }
             case 4 -> {
-//                Hybrid ACO-SA Algorithm
+                // Hybrid ACO-SA Algorithm
 
             }
             case 5 -> {
-//                Hybrid PSO-SA Algorithm
+                // Hybrid PSO-SA Algorithm
                 HybridPSOSA hybridPSOSA = new HybridPSOSA(mc, pso_numParticles, pso_Iteration, pso_defaultW, pso_defaultC1, pso_defaultC2, sa_temp, sa_coolRate, gm_k, gm_alpha);
                 hybridPSOSA.solve();
             }
-            case 9 -> {
-//                Run All
-
+            case 8 -> {
+                ResultEvaluate evaluate = new ResultEvaluate(mc);
             }
             default -> {
             }
         }
+        
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        double durationInMillis = duration / 1_000_000.0;
+        System.out.println("Duration: " + durationInMillis + " ms.");
 
 //        </editor-fold>
 

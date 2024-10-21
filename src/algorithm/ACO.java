@@ -4,6 +4,7 @@ import definition.Machine;
 import definition.VirtualMachine;
 import definition.PhysicalMachine;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -93,17 +94,18 @@ public class ACO {
         return a;
     }
 
-    private ArrayList<PhysicalMachine> CloneHost() {
-        ArrayList<PhysicalMachine> hosts = new ArrayList<>();
-        for (PhysicalMachine machine : pms) {
-            hosts.add(new PhysicalMachine(machine.getCore(), machine.getRam(), machine.getDisk()));
+    private ArrayList<PhysicalMachine> CloneHost(ArrayList<PhysicalMachine> source) {
+        ArrayList<PhysicalMachine> host = new ArrayList<>();
+        for (Iterator<PhysicalMachine> it = source.iterator(); it.hasNext();) {
+            PhysicalMachine pm = new PhysicalMachine(it.next());
+            host.add(pm);
         }
-        return hosts;
+        return host;
     }
 
     private ArrayList<Integer> GenerateTour() {
         ArrayList<Integer> tour = new ArrayList<>();
-        ArrayList<PhysicalMachine> hosts = CloneHost();
+        ArrayList<PhysicalMachine> hosts = CloneHost(pms);
 
         int currentNode = 0;
 
@@ -127,7 +129,7 @@ public class ACO {
     }
     
     private double VirtualAllocation(Ants a, ArrayList<Integer> tour) {
-        ArrayList<PhysicalMachine> hosts = CloneHost();
+        ArrayList<PhysicalMachine> hosts = CloneHost(pms);
 
         for (int i = 0; i < tour.size(); i++) {
             Allocation(hosts, tour.get(i), i);

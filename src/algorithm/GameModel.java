@@ -131,9 +131,10 @@ public class GameModel {
     // F(A) = sgn(1 - alpha) * omega - phil
     public double FairnessUtilization(ArrayList<PhysicalMachine> pms) {
         this.Phil = ResourceUtilization(pms);
-        this.FairUtil = Math.signum(1 - this.alpha) * this.Omega - this.Phil; // -> Negative value
-        this.FairUtil = 1 / Math.abs(this.FairUtil);
+//        this.FairUtil = Math.signum(1 - this.alpha) * this.Omega - this.Phil; // -> Negative value
+//        this.FairUtil = 1 / Math.abs(this.FairUtil);
 //        this.FairUtil = 1 / (1 + Math.exp(this.FairUtil));
+        this.FairUtil = 1 / (this.Omega + this.Phil);
         return this.FairUtil;
     }
 }

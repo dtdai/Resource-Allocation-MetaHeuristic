@@ -29,10 +29,8 @@ public class SA {
         this.vms = new ArrayList<>();
         for (Machine i : machine) {
             switch (i) {
-                case PhysicalMachine physicalMachine ->
-                    this.pms.add(physicalMachine);
-                case VirtualMachine virtualMachine ->
-                    this.vms.add(virtualMachine);
+                case PhysicalMachine p -> this.pms.add(p);
+                case VirtualMachine v -> this.vms.add(v);
                 default -> {
                 }
             }
@@ -72,7 +70,7 @@ public class SA {
         ArrayList<PhysicalMachine> hosts = CloneHost();
 
         for (int i = 0; i < numVM; i++) {
-            int randPM = RandInt(0, numPM - 1);
+            int randPM = RandInteger(0, numPM - 1);
             randPM = CheckAvailable(hosts, randPM, i, 1);
             if (randPM == -1) {
                 break;
@@ -110,7 +108,7 @@ public class SA {
         return host;
     }
 
-    private int RandInt(int min, int max) {
+    private int RandInteger(int min, int max) {
         int result = 0;
         for (int i = 0; i < 10; i++) {
             result = ThreadLocalRandom.current().nextInt(((max - min) + 1)) + min;
@@ -120,7 +118,7 @@ public class SA {
 
     private int CheckAvailable(ArrayList<PhysicalMachine> host, int indexPM, int indexVM, int runtime) {
         while (!host.get(indexPM).CheckAvailable(vms.get(indexVM))) {
-            indexPM = RandInt(0, numPM - 1);
+            indexPM = RandInteger(0, numPM - 1);
             if (runtime > numPM * 10) {
                 return -1;
             }
